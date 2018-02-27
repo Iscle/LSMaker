@@ -1,22 +1,15 @@
-
 /*************************************************** 
-  This is a library for the LSMaker Motor Control
-  Designed specifically to work with the LSMaker robot
-  ----> http://www.salleurl.edu
-  These Motor Control TAD use PWM and Encoders IRQs
-  
-  Written by Joan Camps/Marcos Hervas for LaSalle-URL.  
-  BSD license, all text above must be included in any redistribution
+ * This is a library for the LSMaker Motor Control
+ * Designed specifically to work with the LSMaker robot
+ * ----> http://www.salleurl.edu
+ * These Motor Control TAD use PWM and Encoders IRQs
+ * 
+ * Written by Joan Camps/Marcos Hervas for LaSalle-URL.  
+ * BSD license, all text above must be included in any redistribution
  ****************************************************/
 
 #ifndef LSEPROM_H
 #define LSEPROM_H
-
-#if (ARDUINO >= 100)
- #include "Arduino.h"
-#else
- #include "WProgram.h"
-#endif
 
 #include <SPI.h>
 
@@ -27,21 +20,13 @@
 #define SPI_A2 47
 
 class LSEPROM {
- public:
+public:
   LSEPROM();
   void lsGetMAC(byte *macAddress);
-  
- private:
- void fill_buffer(void);
- byte readSPI(byte A);
- 
- 
+
+private:
+  void fill_buffer(void);
+  byte readSPI(byte A);
 };
-
-
-
-
-
-
 #endif
 

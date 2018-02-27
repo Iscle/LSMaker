@@ -1,4 +1,3 @@
-
 #include <SPI.h>
 #include <EEPROM.h>
 #include <lib_aci.h>
@@ -46,25 +45,25 @@ int i = 0;
 LSMt Motoreta;
 
 const int colors[19] = {
- ILI9341_BLACK,
- ILI9341_NAVY  ,      
- ILI9341_DARKGREEN   ,
- ILI9341_DARKCYAN   ,
- ILI9341_MAROON      ,
- ILI9341_PURPLE     ,
- ILI9341_OLIVE       ,
- ILI9341_LIGHTGREY  ,
- ILI9341_DARKGREY    ,
- ILI9341_BLUE        ,
- ILI9341_GREEN       ,
- ILI9341_CYAN        ,
- ILI9341_RED         ,
- ILI9341_MAGENTA     ,
- ILI9341_YELLOW      ,
- ILI9341_WHITE       ,
- ILI9341_ORANGE     ,
- ILI9341_GREENYELLOW ,
- ILI9341_PINK        };
+  ILI9341_BLACK,
+  ILI9341_NAVY  ,      
+  ILI9341_DARKGREEN   ,
+  ILI9341_DARKCYAN   ,
+  ILI9341_MAROON      ,
+  ILI9341_PURPLE     ,
+  ILI9341_OLIVE       ,
+  ILI9341_LIGHTGREY  ,
+  ILI9341_DARKGREY    ,
+  ILI9341_BLUE        ,
+  ILI9341_GREEN       ,
+  ILI9341_CYAN        ,
+  ILI9341_RED         ,
+  ILI9341_MAGENTA     ,
+  ILI9341_YELLOW      ,
+  ILI9341_WHITE       ,
+  ILI9341_ORANGE     ,
+  ILI9341_GREENYELLOW ,
+  ILI9341_PINK        };
 
 LSTouch Touch = LSTouch();
 
@@ -94,8 +93,8 @@ int x_old, y_old, x_new, y_new;
 
 
 /**
-Put the nRF8001 setup in the RAM of the nRF8001.
-*/
+ * Put the nRF8001 setup in the RAM of the nRF8001.
+ */
 #include "services.h"
 
 
@@ -103,50 +102,51 @@ void LsBattery(){
   float battery;
   float Battery_array[6];
   for(int k=0; k<6; k++) {
-      Battery_array[k] = (float)(analogRead(1)*5/1024.0*42.4/10);
-      }
-    //Battery_index++;
-    battery = 0;
-    for(int k=0; k<6; k++) {
-      battery = battery + Battery_array[k]/6.0;
-      }
+    Battery_array[k] = (float)(analogRead(1)*5/1024.0*42.4/10);
+  }
+  //Battery_index++;
+  battery = 0;
+  for(int k=0; k<6; k++) {
+    battery = battery + Battery_array[k]/6.0;
+  }
 
-    uint8_t battery_percentatge = (uint8_t)(100/((1.2-0.9)*8)*battery-100*0.9/(1.2-0.9));
-    if (battery_percentatge>100) battery_percentatge = 100;
-    if (battery_percentatge<0) battery_percentatge = 0;
+  uint8_t battery_percentatge = (uint8_t)(100/((1.2-0.9)*8)*battery-100*0.9/(1.2-0.9));
+  if (battery_percentatge>100) battery_percentatge = 100;
+  if (battery_percentatge<0) battery_percentatge = 0;
 
-    tft.setRotation(3);
-    tft.setTextSize(2);
-        
-    tft.fillRect(0, 0, 320, 15, ILI9341_BLACK);
+  tft.setRotation(3);
+  tft.setTextSize(2);
 
-    tft.setCursor(130,0);
-  
-    tft.print("Bat:");
-    //tft.setCursor(250,0);
-    tft.print(String(battery));
-    tft.print("V (");
-    tft.print(battery_percentatge);
-    tft.print("%)");
-    
-   
-   if(battery>12.0){
-      tft.fillRect(0, 0, 320, 15, colors[(i)%19]);
-      
-      tft.setCursor(120, 0);
-      tft.print("Charging Battery");    
-    }else if(battery<8){
-      tft.fillRect(0, 0, 320, 15, colors[(i)%19]);
-      
-      tft.setCursor(120, 0);
-      tft.print("Battery Discharged");
-    }
-    tft.setRotation(2);
-    
-    Serial.println("");
-    Serial.println((String)"Bateria es de " + battery + "\tVolts");
-    Serial.println("");
-    
+  tft.fillRect(0, 0, 320, 15, ILI9341_BLACK);
+
+  tft.setCursor(130,0);
+
+  tft.print("Bat:");
+  //tft.setCursor(250,0);
+  tft.print(String(battery));
+  tft.print("V (");
+  tft.print(battery_percentatge);
+  tft.print("%)");
+
+
+  if(battery>12.0){
+    tft.fillRect(0, 0, 320, 15, colors[(i)%19]);
+
+    tft.setCursor(120, 0);
+    tft.print("Charging Battery");    
+  }
+  else if(battery<8){
+    tft.fillRect(0, 0, 320, 15, colors[(i)%19]);
+
+    tft.setCursor(120, 0);
+    tft.print("Battery Discharged");
+  }
+  tft.setRotation(2);
+
+  Serial.println("");
+  Serial.println((String)"Bateria es de " + battery + "\tVolts");
+  Serial.println("");
+
 }
 
 
@@ -154,34 +154,34 @@ void LsPeriferics(){
 
   float battery, battery_aux;
 
- 
+
   Touch.Motor();
 
-/*
+  /*
   //Set to a correct position
-  if((millis()-t3)>=5000){
-    t3 = millis();
-    i++;
-//    tft.println("Battery Discharged!!!");
-    tft.fillScreen(colors[i%19]);
-  }*/
+   if((millis()-t3)>=5000){
+   t3 = millis();
+   i++;
+   //    tft.println("Battery Discharged!!!");
+   tft.fillScreen(colors[i%19]);
+   }*/
 
- if((millis()-t4)>=20000){
+  if((millis()-t4)>=20000){
     t4 = millis();
-    
+
     //  Revisem l'estat de la bateria
     LsBattery();
-    
- }
- 
- if((millis()-t6)>=2500){
+
+  }
+
+  if((millis()-t6)>=2500){
     t6 = millis();
-    
+
     beat = !beat;
     digitalWrite(HBEAT, beat);
- 
-    
-    
+
+
+
     // Query the sensor
     sensor.readAccelData();
     sensor.readMagData();
@@ -203,7 +203,7 @@ void LsPeriferics(){
 
     tft.setRotation(3);
     tft.fillRect(0, 200, 320, 215, ILI9341_BLACK);
-    
+
     //tft.setRotation(3);
     tft.setCursor(0, 200);
     tft.setTextSize(1);
@@ -217,8 +217,8 @@ void LsPeriferics(){
     tft.setCursor(240, 200);
     tft.print("Z:");
     tft.print((float)sensor.accelData.z*9.8/(float)(2<<11));
-    
-  
+
+
     // Magnometer
     Serial.print("Mag ");
     Serial.print("X: ");
@@ -242,7 +242,7 @@ void LsPeriferics(){
     tft.setCursor(240, 215);
     tft.print("Z:");
     tft.print((float)sensor.magData.z*1200.0/32767.0);
-    
+
     // Print out the data
     // Gyroscope
     Serial.print("Gyroscope ");
@@ -253,8 +253,8 @@ void LsPeriferics(){
     Serial.print(" Z: ");
     Serial.println((int)sensor_g.gyroData.z);
     Serial.println("");
-    }
-  
+  }
+
 
   if(Touch.touched()){
     Touch.getPoint();
@@ -264,48 +264,50 @@ void LsPeriferics(){
 
     x_old = x_new;
     y_old = y_new;
-    
+
     //Calibración manual
     y_new = (int)(((long int)(Touch.y)*320)/1024);
     x_new = (int)(((long int)(Touch.x)*200)/1024);
-    
+
     if(y_new<17){
       y_new = 17;
-    }else{
+    }
+    else{
       y_new = (int)(((long int)(y_new)-17)*320/290);
     }
     if(y_new > 320) y_new = 320;
 
     if(x_new<17){
       x_new = 17;
-    }else{
+    }
+    else{
       x_new = (int)(((long int)(x_new)-17)*240/170);
     }
-   // if(x_new > 200) y_new = 200;
+    // if(x_new > 200) y_new = 200;
 
-//    Serial.println(x_new);
-//    Serial.println(y_new);
+    //    Serial.println(x_new);
+    //    Serial.println(y_new);
 
 
-    
+
     if(!((x_new==y_new) && (x_old==y_old))) tft.drawLine(x_old, y_old, x_new, y_new, ILI9341_WHITE);
-    
-    }
-    
-       //envia dades només si en rep
-   if (Serial3.available()){ 
-       //llegeix el byte d'entrada
-         char byteRebut = Serial3.read();
-          Serial.print(byteRebut);
-   }
-   if (Serial.available()){ 
-       //llegeix el byte d'entrada
-         char byteRebut = Serial.read();
-         Serial3.print(byteRebut);
-   }
-  
-  
+
   }
+
+  //envia dades només si en rep
+  if (Serial3.available()){ 
+    //llegeix el byte d'entrada
+    char byteRebut = Serial3.read();
+    Serial.print(byteRebut);
+  }
+  if (Serial.available()){ 
+    //llegeix el byte d'entrada
+    char byteRebut = Serial.read();
+    Serial3.print(byteRebut);
+  }
+
+
+}
 
 
 
@@ -337,28 +339,28 @@ void LsPeriferics(){
 
 
 /** @defgroup ble_uart_project_template ble_uart_project_template
-@{
-@ingroup projects
-@brief Empty project that can be used as a template for new projects.
-
-@details
-This project is a firmware template for new projects.
-The project will run correctly in its current state.
-It can send data on the UART TX characteristic
-It can receive data on the UART RX characterisitc.
-With this project you have a starting point for adding your own application functionality.
-
-The following instructions describe the steps to be made on the Windows PC:
-
- -# Install the Master Control Panel on your computer. Connect the Master Emulator
-    (nRF2739) and make sure the hardware drivers are installed.
-
--# You can use the nRF UART app in the Apple iOS app store and Google Play for Android 4.3 for Samsung Galaxy S4
-   with this UART template app
-
--# You can send data from the Arduino serial monitor, maximum length of a string is 19 bytes
-   Set the line ending to "Newline" in the Serial monitor (The newline is also sent over the air
-
+ * @{
+ * @ingroup projects
+ * @brief Empty project that can be used as a template for new projects.
+ * 
+ * @details
+ * This project is a firmware template for new projects.
+ * The project will run correctly in its current state.
+ * It can send data on the UART TX characteristic
+ * It can receive data on the UART RX characterisitc.
+ * With this project you have a starting point for adding your own application functionality.
+ * 
+ * The following instructions describe the steps to be made on the Windows PC:
+ * 
+ * -# Install the Master Control Panel on your computer. Connect the Master Emulator
+ * (nRF2739) and make sure the hardware drivers are installed.
+ * 
+ * -# You can use the nRF UART app in the Apple iOS app store and Google Play for Android 4.3 for Samsung Galaxy S4
+ * with this UART template app
+ * 
+ * -# You can send data from the Arduino serial monitor, maximum length of a string is 19 bytes
+ * Set the line ending to "Newline" in the Serial monitor (The newline is also sent over the air
+ * 
  *
  * Click on the "Serial Monitor" button on the Arduino IDE to reset the Arduino and start the application.
  * The setup() function is called first and is called only once for each reset of the Arduino.
@@ -378,28 +380,28 @@ The following instructions describe the steps to be made on the Windows PC:
 
 /*
 #include <SPI.h>
-#include <EEPROM.h>
-#include <lib_aci.h>
-#include <aci_setup.h>
-#include "uart_over_ble.h"
-*/
+ #include <EEPROM.h>
+ #include <lib_aci.h>
+ #include <aci_setup.h>
+ #include "uart_over_ble.h"
+ */
 /**
-Put the nRF8001 setup in the RAM of the nRF8001.
-*/
+ * Put the nRF8001 setup in the RAM of the nRF8001.
+ */
 //#include "services.h"
 /**
-Include the services_lock.h to put the setup in the OTP memory of the nRF8001.
-This would mean that the setup cannot be changed once put in.
-However this removes the need to do the setup of the nRF8001 on every reset.
-*/
+ * Include the services_lock.h to put the setup in the OTP memory of the nRF8001.
+ * This would mean that the setup cannot be changed once put in.
+ * However this removes the need to do the setup of the nRF8001 on every reset.
+ */
 
 
 #ifdef SERVICES_PIPE_TYPE_MAPPING_CONTENT
-    static services_pipe_type_mapping_t
-        services_pipe_type_mapping[NUMBER_OF_PIPES] = SERVICES_PIPE_TYPE_MAPPING_CONTENT;
+static services_pipe_type_mapping_t
+services_pipe_type_mapping[NUMBER_OF_PIPES] = SERVICES_PIPE_TYPE_MAPPING_CONTENT;
 #else
-    #define NUMBER_OF_PIPES 0
-    static services_pipe_type_mapping_t * services_pipe_type_mapping = NULL;
+#define NUMBER_OF_PIPES 0
+static services_pipe_type_mapping_t * services_pipe_type_mapping = NULL;
 #endif
 
 /* Store the setup for the nRF8001 in the flash of the AVR to save on RAM */
@@ -420,18 +422,18 @@ static struct aci_state_t aci_state;
 
 /*
 Temporary buffers for sending ACI commands
-*/
+ */
 static hal_aci_evt_t  aci_data;
 //static hal_aci_data_t aci_cmd;
 
 /*
 Timing change state variable
-*/
+ */
 static bool timing_change_done          = false;
 
 /*
 Used to test the UART TX characteristic notification
-*/
+ */
 static uart_over_ble_t uart_over_ble;
 static uint8_t         uart_buffer[20];
 static uint8_t         uart_buffer_len = 0;
@@ -439,7 +441,7 @@ static uint8_t         dummychar = 0;
 
 /*
 Initialize the radio_ack. This is the ack received for every transmitted packet.
-*/
+ */
 //static bool radio_ack_pending = false;
 
 /* Define how assert should function in the BLE library */
@@ -455,17 +457,17 @@ void __ble_assert(const char *file, uint16_t line)
 
 /*
 Description:
-
-In this template we are using the BTLE as a UART and can send and receive packets.
-The maximum size of a packet is 20 bytes.
-When a command it received a response(s) are transmitted back.
-Since the response is done using a Notification the peer must have opened it(subscribed to it) before any packet is transmitted.
-The pipe for the UART_TX becomes available once the peer opens it.
-See section 20.4.1 -> Opening a Transmit pipe
-In the master control panel, clicking Enable Services will open all the pipes on the nRF8001.
-
-The ACI Evt Data Credit provides the radio level ack of a transmitted packet.
-*/
+ 
+ In this template we are using the BTLE as a UART and can send and receive packets.
+ The maximum size of a packet is 20 bytes.
+ When a command it received a response(s) are transmitted back.
+ Since the response is done using a Notification the peer must have opened it(subscribed to it) before any packet is transmitted.
+ The pipe for the UART_TX becomes available once the peer opens it.
+ See section 20.4.1 -> Opening a Transmit pipe
+ In the master control panel, clicking Enable Services will open all the pipes on the nRF8001.
+ 
+ The ACI Evt Data Credit provides the radio level ack of a transmitted packet.
+ */
 void setup(void)
 {
   String texto;
@@ -481,25 +483,26 @@ void setup(void)
     Serial.println("* is a card inserted?");
     Serial.println("* is your wiring correct?");
     Serial.println("* did you change the chipSelect pin to match your shield or module?");
-   // return;
-  } else {
+    // return;
+  } 
+  else {
     Serial.println("Wiring is correct and a card is present.");
   }
 
   // print the type of card
   Serial.print("\nCard type: ");
   switch (card.type()) {
-    case SD_CARD_TYPE_SD1:
-      Serial.println("SD1");
-      break;
-    case SD_CARD_TYPE_SD2:
-      Serial.println("SD2");
-      break;
-    case SD_CARD_TYPE_SDHC:
-      Serial.println("SDHC");
-      break;
-    default:
-      Serial.println("Unknown");
+  case SD_CARD_TYPE_SD1:
+    Serial.println("SD1");
+    break;
+  case SD_CARD_TYPE_SD2:
+    Serial.println("SD2");
+    break;
+  case SD_CARD_TYPE_SDHC:
+    Serial.println("SDHC");
+    break;
+  default:
+    Serial.println("Unknown");
   }
 
   // Now we will try to open the 'volume'/'partition' - it should be FAT16 or FAT32
@@ -534,7 +537,7 @@ void setup(void)
   // list all files in the card with date and size
   root.ls(LS_R | LS_DATE | LS_SIZE);
 
-  
+
   // put your setup code here, to run once:
   Touch.begin();
 
@@ -544,23 +547,28 @@ void setup(void)
 
   // read diagnostics (optional but can help debug problems)
   uint8_t x = tft.readcommand8(ILI9341_RDMODE);
-  Serial.print("Display Power Mode: 0x"); Serial.println(x, HEX);
+  Serial.print("Display Power Mode: 0x"); 
+  Serial.println(x, HEX);
   x = tft.readcommand8(ILI9341_RDMADCTL);
-  Serial.print("MADCTL Mode: 0x"); Serial.println(x, HEX);
+  Serial.print("MADCTL Mode: 0x"); 
+  Serial.println(x, HEX);
   x = tft.readcommand8(ILI9341_RDPIXFMT);
-  Serial.print("Pixel Format: 0x"); Serial.println(x, HEX);
+  Serial.print("Pixel Format: 0x"); 
+  Serial.println(x, HEX);
   x = tft.readcommand8(ILI9341_RDIMGFMT);
-  Serial.print("Image Format: 0x"); Serial.println(x, HEX);
+  Serial.print("Image Format: 0x"); 
+  Serial.println(x, HEX);
   x = tft.readcommand8(ILI9341_RDSELFDIAG);
-  Serial.print("Self Diagnostic: 0x"); Serial.println(x, HEX); 
+  Serial.print("Self Diagnostic: 0x"); 
+  Serial.println(x, HEX); 
 
   // filled of circles
   //Serial.print(F("Circles (filled)         "));
   //Serial.println(testFilledCircles(10, ILI9341_MAGENTA));
   tft.setRotation(2);
   tft.fillScreen(ILI9341_MAGENTA);
-    
-  
+
+
   // AFEGIT !!
   pinMode(49,OUTPUT);
   pinMode(48,OUTPUT);
@@ -574,12 +582,12 @@ void setup(void)
    *      Accelerometer configuration
    * 
    ******************************************************************** */
- // Reset Acelerometro
+  // Reset Acelerometro
   pinMode(38,OUTPUT);
-  
+
   digitalWrite(38, LOW);
 
-// Reset Giroscopio
+  // Reset Giroscopio
   pinMode(35,OUTPUT);
   digitalWrite(35, HIGH);
 
@@ -596,7 +604,7 @@ void setup(void)
 
   digitalWrite(RESET_WIFI,HIGH);
   digitalWrite(ENABLE_WIFI,HIGH);
-  
+
   //delay(100);
   //digitalWrite(RESET_WIFI,LOW);
   //delay(2000);
@@ -605,19 +613,19 @@ void setup(void)
 
 
   t3 = millis();
-  
+
 
   /*if((millis()-t1)>=1000){
-    if (Serial3.available()){ 
-      //llegeix el byte d'entrada
-      char byteRebut = Serial3.read();
-      Serial.print(byteRebut);
-    }
-  }*/
+   if (Serial3.available()){ 
+   //llegeix el byte d'entrada
+   char byteRebut = Serial3.read();
+   Serial.print(byteRebut);
+   }
+   }*/
 
   tft.fillScreen(ILI9341_BLACK);
 
-//  tft.setColor(0,255,0);
+  //  tft.setColor(0,255,0);
   tft.setRotation(3);
 
   tft.setCursor(50, 60);
@@ -636,37 +644,38 @@ void setup(void)
 
   MACADDR.lsGetMAC(macAddress);
 
-  
+
   tft.print("MAC: ");//XX:XX:XX:XX:XX:XX");
   for(int k = 0; k < 5; k++){
     tft.print(macAddress[k],HEX);
     tft.print("-");
-    }
+  }
   tft.print(macAddress[5],HEX);
 
   LsBattery();
-      
+
   delay(1000);
 
 
   //Serial.begin(115200);
-  
+
   //Wait until the serial port is available (useful only for the Leonardo)
   //As the Leonardo board is not reseted every time you open the Serial Monitor
-  #if defined (__AVR_ATmega32U4__)
-    while(!Serial)
-    {}
-    delay(5000);  //5 seconds delay for enabling to see the start up comments on the serial board
-  #elif defined(__PIC32MX__)
-    delay(1000);
-  #endif
+#if defined (__AVR_ATmega32U4__)
+  while(!Serial)
+  {
+  }
+  delay(5000);  //5 seconds delay for enabling to see the start up comments on the serial board
+#elif defined(__PIC32MX__)
+  delay(1000);
+#endif
 
   Serial.println(F("Arduino setup"));
   Serial.println(F("Set line ending to newline to send data from the serial monitor"));
 
   /**
-  Point ACI data structures to the the setup data that the nRFgo studio generated for the nRF8001
-  */
+   * Point ACI data structures to the the setup data that the nRFgo studio generated for the nRF8001
+   */
   if (NULL != services_pipe_type_mapping)
   {
     aci_state.aci_setup_info.services_pipe_type_mapping = &services_pipe_type_mapping[0];
@@ -681,8 +690,8 @@ void setup(void)
 
   /*
   Tell the ACI library, the MCU to nRF8001 pin connections.
-  The Active pin is optional and can be marked UNUSED
-  */
+   The Active pin is optional and can be marked UNUSED
+   */
   aci_state.aci_pins.board_name = BOARD_DEFAULT; //See board.h for details REDBEARLAB_SHIELD_V1_1 or BOARD_DEFAULT
   aci_state.aci_pins.reqn_pin   = 53; //SS for Nordic board, 9 for REDBEARLAB_SHIELD_V1_1                                 // era 9
   aci_state.aci_pins.rdyn_pin   = 18; //3 for Nordic board, 8 for REDBEARLAB_SHIELD_V1_1                                  // era 8
@@ -691,8 +700,8 @@ void setup(void)
   aci_state.aci_pins.sck_pin    = SCK;
 
   aci_state.aci_pins.spi_clock_divider      = SPI_CLOCK_DIV8;//SPI_CLOCK_DIV8  = 2MHz SPI speed
-                                                             //SPI_CLOCK_DIV16 = 1MHz SPI speed
-  
+  //SPI_CLOCK_DIV16 = 1MHz SPI speed
+
   aci_state.aci_pins.reset_pin              = 28; //4 for Nordic board, UNUSED for REDBEARLAB_SHIELD_V1_1                  // era 4
   aci_state.aci_pins.active_pin             = 29; //29
   aci_state.aci_pins.optional_chip_sel_pin  = UNUSED;
@@ -706,21 +715,21 @@ void setup(void)
   //The second parameter is for turning debug printing on for the ACI Commands and Events so they be printed on the Serial
   lib_aci_init(&aci_state, false); //Marcos: I change false by true
 
-  pinMode(HBEAT, OUTPUT);
+    pinMode(HBEAT, OUTPUT);
   digitalWrite(HBEAT, HIGH);
-  
+
   t3 = millis();
   t4 = millis();
   t5 = millis();
 
   Motoreta.begin();
   //LsMtInit();     // AFEGIT
-  
+
 }
 
 void uart_over_ble_init(void)
 {
-    uart_over_ble.uart_rts_local = true;
+  uart_over_ble.uart_rts_local = true;
 }
 
 bool uart_tx(uint8_t *buffer, uint8_t buffer_len)
@@ -728,7 +737,7 @@ bool uart_tx(uint8_t *buffer, uint8_t buffer_len)
   bool status = false;
 
   if (lib_aci_is_pipe_available(&aci_state, PIPE_UART_OVER_BTLE_UART_TX_TX) &&
-      (aci_state.data_credit_available >= 1))
+    (aci_state.data_credit_available >= 1))
   {
     status = lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, buffer, buffer_len);
     if (status)
@@ -743,7 +752,7 @@ bool uart_process_control_point_rx(uint8_t *byte, uint8_t length)
 {
   bool status = false;
   aci_ll_conn_params_t *conn_params;
-  
+
   if (lib_aci_is_pipe_available(&aci_state, PIPE_UART_OVER_BTLE_UART_CONTROL_POINT_TX) )
   {
     Serial.println(*byte, HEX);
@@ -751,61 +760,61 @@ bool uart_process_control_point_rx(uint8_t *byte, uint8_t length)
     {
       /*
       Queues a ACI Disconnect to the nRF8001 when this packet is received.
-      May cause some of the UART packets being sent to be dropped
-      */
-      case UART_OVER_BLE_DISCONNECT:
-        /*
+       May cause some of the UART packets being sent to be dropped
+       */
+    case UART_OVER_BLE_DISCONNECT:
+      /*
         Parameters:
-        None
-        */
-        lib_aci_disconnect(&aci_state, ACI_REASON_TERMINATE);
-        status = true;
-        break;
+       None
+       */
+      lib_aci_disconnect(&aci_state, ACI_REASON_TERMINATE);
+      status = true;
+      break;
 
       /*
       Queues an ACI Change Timing to the nRF8001
-      */
-      case UART_OVER_BLE_LINK_TIMING_REQ:
-        /*
+       */
+    case UART_OVER_BLE_LINK_TIMING_REQ:
+      /*
         Parameters:
-        Connection interval min: 2 bytes
-        Connection interval max: 2 bytes
-        Slave latency:           2 bytes
-        Timeout:                 2 bytes
-        Same format as Peripheral Preferred Connection Parameters (See nRFgo studio -> nRF8001 Configuration -> GAP Settings
-        Refer to the ACI Change Timing Request in the nRF8001 Product Specifications
-        */
-        conn_params = (aci_ll_conn_params_t *)(byte+1);
-        lib_aci_change_timing( conn_params->min_conn_interval,
-                                conn_params->max_conn_interval,
-                                conn_params->slave_latency,
-                                conn_params->timeout_mult);
-        status = true;
-        break;
-  
+       Connection interval min: 2 bytes
+       Connection interval max: 2 bytes
+       Slave latency:           2 bytes
+       Timeout:                 2 bytes
+       Same format as Peripheral Preferred Connection Parameters (See nRFgo studio -> nRF8001 Configuration -> GAP Settings
+       Refer to the ACI Change Timing Request in the nRF8001 Product Specifications
+       */
+      conn_params = (aci_ll_conn_params_t *)(byte+1);
+      lib_aci_change_timing( conn_params->min_conn_interval,
+      conn_params->max_conn_interval,
+      conn_params->slave_latency,
+      conn_params->timeout_mult);
+      status = true;
+      break;
+
       /*
       Clears the RTS of the UART over BLE
-      */
-      case UART_OVER_BLE_TRANSMIT_STOP:
-        /*
+       */
+    case UART_OVER_BLE_TRANSMIT_STOP:
+      /*
         Parameters:
-        None
-        */
-        uart_over_ble.uart_rts_local = false;
-        status = true;
-        break;
+       None
+       */
+      uart_over_ble.uart_rts_local = false;
+      status = true;
+      break;
 
       /*
       Set the RTS of the UART over BLE
-      */
-      case UART_OVER_BLE_TRANSMIT_OK:
-        /*
+       */
+    case UART_OVER_BLE_TRANSMIT_OK:
+      /*
         Parameters:
-        None
-        */
-        uart_over_ble.uart_rts_local = true;
-        status = true;
-        break;
+       None
+       */
+      uart_over_ble.uart_rts_local = true;
+      status = true;
+      break;
     }
   }
   return status;
@@ -824,215 +833,215 @@ void aci_loop()
     switch(aci_evt->evt_opcode)
     {
       /**
-      As soon as you reset the nRF8001 you will get an ACI Device Started Event
-      */
-      case ACI_EVT_DEVICE_STARTED:
+       * As soon as you reset the nRF8001 you will get an ACI Device Started Event
+       */
+    case ACI_EVT_DEVICE_STARTED:
       {
         aci_state.data_credit_total = aci_evt->params.device_started.credit_available;
         switch(aci_evt->params.device_started.device_mode)
         {
-          case ACI_DEVICE_SETUP:
-            /**
-            When the device is in the setup mode
-            */
-            Serial.println(F("Evt Device Started: Setup"));
-            setup_required = true;
-            break;
+        case ACI_DEVICE_SETUP:
+          /**
+           * When the device is in the setup mode
+           */
+          Serial.println(F("Evt Device Started: Setup"));
+          setup_required = true;
+          break;
 
-          case ACI_DEVICE_STANDBY:
-            Serial.println(F("Evt Device Started: Standby"));
-            //Looking for an iPhone by sending radio advertisements
-            //When an iPhone connects to us we will get an ACI_EVT_CONNECTED event from the nRF8001
-            if (aci_evt->params.device_started.hw_error)
-            {
-              delay(20); //Magic number used to make sure the HW error event is handled correctly.
-            }
-            else
-            {
+        case ACI_DEVICE_STANDBY:
+          Serial.println(F("Evt Device Started: Standby"));
+          //Looking for an iPhone by sending radio advertisements
+          //When an iPhone connects to us we will get an ACI_EVT_CONNECTED event from the nRF8001
+          if (aci_evt->params.device_started.hw_error)
+          {
+            delay(20); //Magic number used to make sure the HW error event is handled correctly.
+          }
+          else
+          {
             lib_aci_connect(180/* in seconds */, 0x0050 /* advertising interval 50ms*/);
             Serial.println(F("Advertising started"));
-            }
-            break;
+          }
+          break;
         }
       }
-        break; //ACI Device Started Event
+      break; //ACI Device Started Event
 
-      case ACI_EVT_CMD_RSP:
-        //If an ACI command response event comes with an error -> stop
-        if (ACI_STATUS_SUCCESS != aci_evt->params.cmd_rsp.cmd_status)
-        {
-          //ACI ReadDynamicData and ACI WriteDynamicData will have status codes of
-          //TRANSACTION_CONTINUE and TRANSACTION_COMPLETE
-          //all other ACI commands will have status code of ACI_STATUS_SCUCCESS for a successful command
-          Serial.print(F("ACI Command "));
-          Serial.println(aci_evt->params.cmd_rsp.cmd_opcode, HEX);
-          Serial.print(F("Evt Cmd respone: Status "));
-          Serial.println(aci_evt->params.cmd_rsp.cmd_status, HEX);
-        }
-        if (ACI_CMD_GET_DEVICE_VERSION == aci_evt->params.cmd_rsp.cmd_opcode)
-        {
-          //Store the version and configuration information of the nRF8001 in the Hardware Revision String Characteristic
-          lib_aci_set_local_data(&aci_state, PIPE_DEVICE_INFORMATION_HARDWARE_REVISION_STRING_SET,
-            (uint8_t *)&(aci_evt->params.cmd_rsp.params.get_device_version), sizeof(aci_evt_cmd_rsp_params_get_device_version_t));
-        }
-        break;
+    case ACI_EVT_CMD_RSP:
+      //If an ACI command response event comes with an error -> stop
+      if (ACI_STATUS_SUCCESS != aci_evt->params.cmd_rsp.cmd_status)
+      {
+        //ACI ReadDynamicData and ACI WriteDynamicData will have status codes of
+        //TRANSACTION_CONTINUE and TRANSACTION_COMPLETE
+        //all other ACI commands will have status code of ACI_STATUS_SCUCCESS for a successful command
+        Serial.print(F("ACI Command "));
+        Serial.println(aci_evt->params.cmd_rsp.cmd_opcode, HEX);
+        Serial.print(F("Evt Cmd respone: Status "));
+        Serial.println(aci_evt->params.cmd_rsp.cmd_status, HEX);
+      }
+      if (ACI_CMD_GET_DEVICE_VERSION == aci_evt->params.cmd_rsp.cmd_opcode)
+      {
+        //Store the version and configuration information of the nRF8001 in the Hardware Revision String Characteristic
+        lib_aci_set_local_data(&aci_state, PIPE_DEVICE_INFORMATION_HARDWARE_REVISION_STRING_SET,
+        (uint8_t *)&(aci_evt->params.cmd_rsp.params.get_device_version), sizeof(aci_evt_cmd_rsp_params_get_device_version_t));
+      }
+      break;
 
-      case ACI_EVT_CONNECTED:
-        Serial.println(F("Evt Connected"));
-        uart_over_ble_init();
-        timing_change_done              = false;
-        aci_state.data_credit_available = aci_state.data_credit_total;
+    case ACI_EVT_CONNECTED:
+      Serial.println(F("Evt Connected"));
+      uart_over_ble_init();
+      timing_change_done              = false;
+      aci_state.data_credit_available = aci_state.data_credit_total;
 
-        /*
+      /*
         Get the device version of the nRF8001 and store it in the Hardware Revision String
-        */
-        lib_aci_device_version();
-        break;
+       */
+      lib_aci_device_version();
+      break;
 
-      case ACI_EVT_PIPE_STATUS:
-        Serial.println(F("Evt Pipe Status"));
-        if (lib_aci_is_pipe_available(&aci_state, PIPE_UART_OVER_BTLE_UART_TX_TX) && (false == timing_change_done))
+    case ACI_EVT_PIPE_STATUS:
+      Serial.println(F("Evt Pipe Status"));
+      if (lib_aci_is_pipe_available(&aci_state, PIPE_UART_OVER_BTLE_UART_TX_TX) && (false == timing_change_done))
+      {
+        lib_aci_change_timing_GAP_PPCP(); // change the timing on the link as specified in the nRFgo studio -> nRF8001 conf. -> GAP.  
+        // Used to increase or decrease bandwidth
+        timing_change_done = true;
+      }
+      break;
+
+    case ACI_EVT_TIMING:
+      Serial.println(F("Evt link connection interval changed"));
+      lib_aci_set_local_data(&aci_state,
+      PIPE_UART_OVER_BTLE_UART_LINK_TIMING_CURRENT_SET,
+      (uint8_t *)&(aci_evt->params.timing.conn_rf_interval), /* Byte aligned */
+      PIPE_UART_OVER_BTLE_UART_LINK_TIMING_CURRENT_SET_MAX_SIZE);
+      break;
+
+    case ACI_EVT_DISCONNECTED:
+      Serial.println(F("Evt Disconnected/Advertising timed out"));
+      lib_aci_connect(180/* in seconds */, 0x0100 /* advertising interval 100ms*/);
+      Serial.println(F("Advertising started"));
+      break;
+
+    case ACI_EVT_DATA_RECEIVED:
+
+      //Serial.print(F("Pipe Number: "));
+      //Serial.println(aci_evt->params.data_received.rx_data.pipe_number, DEC);
+      if (PIPE_UART_OVER_BTLE_UART_RX_RX == aci_evt->params.data_received.rx_data.pipe_number)
+      {
+        char Opcode;
+        char Velocitat;
+        char Acceleracio;
+        char Gir;
+        float Lsp,Rsp;
+        float Den = 175.0;
+        //Serial.print(F(" Data(Hex) : "));
+        for(int i=0; i<aci_evt->len - 2; i++)
         {
-          lib_aci_change_timing_GAP_PPCP(); // change the timing on the link as specified in the nRFgo studio -> nRF8001 conf. -> GAP.  
-                                            // Used to increase or decrease bandwidth
-          timing_change_done = true;
-        }
-        break;
-
-      case ACI_EVT_TIMING:
-        Serial.println(F("Evt link connection interval changed"));
-        lib_aci_set_local_data(&aci_state,
-                                PIPE_UART_OVER_BTLE_UART_LINK_TIMING_CURRENT_SET,
-                                (uint8_t *)&(aci_evt->params.timing.conn_rf_interval), /* Byte aligned */
-                                PIPE_UART_OVER_BTLE_UART_LINK_TIMING_CURRENT_SET_MAX_SIZE);
-        break;
-
-      case ACI_EVT_DISCONNECTED:
-        Serial.println(F("Evt Disconnected/Advertising timed out"));
-        lib_aci_connect(180/* in seconds */, 0x0100 /* advertising interval 100ms*/);
-        Serial.println(F("Advertising started"));
-        break;
-
-      case ACI_EVT_DATA_RECEIVED:
-
-        //Serial.print(F("Pipe Number: "));
-        //Serial.println(aci_evt->params.data_received.rx_data.pipe_number, DEC);
-        if (PIPE_UART_OVER_BTLE_UART_RX_RX == aci_evt->params.data_received.rx_data.pipe_number)
-        {
-char Opcode;
-char Velocitat;
-char Acceleracio;
-char Gir;
-float Lsp,Rsp;
-float Den = 175.0;
-          //Serial.print(F(" Data(Hex) : "));
-          for(int i=0; i<aci_evt->len - 2; i++)
-          {
-//            Serial.print((char)aci_evt->params.data_received.rx_data.aci_data[i]);
+          //            Serial.print((char)aci_evt->params.data_received.rx_data.aci_data[i]);
           //  Serial.println((char)aci_evt->params.data_received.rx_data.aci_data[i],HEX);
-            uart_buffer[i] = aci_evt->params.data_received.rx_data.aci_data[i];
+          uart_buffer[i] = aci_evt->params.data_received.rx_data.aci_data[i];
           //  Serial.print(F(" "));
-          }
-          uart_buffer_len = aci_evt->len - 2;
-//Serial.println("rebent trama");
-// ------>
-/*
+        }
+        uart_buffer_len = aci_evt->len - 2;
+        //Serial.println("rebent trama");
+        // ------>
+        /*
 /Serial.println(uart_buffer[0],HEX);
-Serial.println(uart_buffer[1],HEX);
-Serial.println(uart_buffer[2],HEX);
-Serial.println(uart_buffer[3],HEX);
-Serial.println(uart_buffer[4],HEX);
-*/
-          // AQUI SE SALTA QUAN ES REP TRAMA
-          Opcode = uart_buffer[1];
-          //if (uart_buffer[1]!=0 ) 
-          Velocitat = uart_buffer[2];
-          Acceleracio = uart_buffer[3];
-          Gir = uart_buffer[4];
-//Serial.println(Velocitat,HEX);
-//Serial.println(Gir,HEX);
-          if (Velocitat>100) Velocitat=100;
-          if (Velocitat<-100) Velocitat=-100;
-          if (Gir==0) {
-            Rsp=Velocitat;
-            Lsp=Velocitat;
-          }
-          if (Gir>0) {  //
-            Rsp = Velocitat*(1+Gir/Den);
-            if (Rsp>100.0) Rsp=100.0;
-            if (Rsp<-100.0) Rsp=-100.0;
-            Lsp = Rsp*(1-2*Gir/Den);
-          }
-          if (Gir<0) {
-            Lsp = Velocitat*(1-Gir/Den);
-            if (Lsp>100.0) Lsp=100.0;
-            if (Lsp<-100.0) Lsp=-100.0;
-            Rsp = Lsp*(1+2*Gir/Den);
-          }
-//Serial.print(Lsp,DEC); //Marcos has commented this line
-//Serial.print(" ");
-//Serial.println(Rsp,DEC);
-          Motoreta.LsMtMando(Lsp,Rsp,1);
-//          LsMtMando(Velocitat*(1-Gir/100.0),Velocitat*(1+Gir/100.0),1);
-//          LsMtMando(Velocitat,Velocitat,1);
-          Motoreta.LsMtMotor();
-// ------>
+         Serial.println(uart_buffer[1],HEX);
+         Serial.println(uart_buffer[2],HEX);
+         Serial.println(uart_buffer[3],HEX);
+         Serial.println(uart_buffer[4],HEX);
+         */
+        // AQUI SE SALTA QUAN ES REP TRAMA
+        Opcode = uart_buffer[1];
+        //if (uart_buffer[1]!=0 ) 
+        Velocitat = uart_buffer[2];
+        Acceleracio = uart_buffer[3];
+        Gir = uart_buffer[4];
+        //Serial.println(Velocitat,HEX);
+        //Serial.println(Gir,HEX);
+        if (Velocitat>100) Velocitat=100;
+        if (Velocitat<-100) Velocitat=-100;
+        if (Gir==0) {
+          Rsp=Velocitat;
+          Lsp=Velocitat;
+        }
+        if (Gir>0) {  //
+          Rsp = Velocitat*(1+Gir/Den);
+          if (Rsp>100.0) Rsp=100.0;
+          if (Rsp<-100.0) Rsp=-100.0;
+          Lsp = Rsp*(1-2*Gir/Den);
+        }
+        if (Gir<0) {
+          Lsp = Velocitat*(1-Gir/Den);
+          if (Lsp>100.0) Lsp=100.0;
+          if (Lsp<-100.0) Lsp=-100.0;
+          Rsp = Lsp*(1+2*Gir/Den);
+        }
+        //Serial.print(Lsp,DEC); //Marcos has commented this line
+        //Serial.print(" ");
+        //Serial.println(Rsp,DEC);
+        Motoreta.LsMtMando(Lsp,Rsp,1);
+        //          LsMtMando(Velocitat*(1-Gir/100.0),Velocitat*(1+Gir/100.0),1);
+        //          LsMtMando(Velocitat,Velocitat,1);
+        Motoreta.LsMtMotor();
+        // ------>
 
-    //      Serial.println(F(""));
-          if (lib_aci_is_pipe_available(&aci_state, PIPE_UART_OVER_BTLE_UART_TX_TX))
-          {
-            /*Do this to test the loopback otherwise comment it out
-            */
-            /*
+        //      Serial.println(F(""));
+        if (lib_aci_is_pipe_available(&aci_state, PIPE_UART_OVER_BTLE_UART_TX_TX))
+        {
+          /*Do this to test the loopback otherwise comment it out
+           */
+          /*
             if (!uart_tx(&uart_buffer[0], aci_evt->len - 2))
-            {
-              Serial.println(F("UART loopback failed"));
-            }
-            else
-            {
-              Serial.println(F("UART loopback OK"));
-            }
-            */
-          }
+           {
+           Serial.println(F("UART loopback failed"));
+           }
+           else
+           {
+           Serial.println(F("UART loopback OK"));
+           }
+           */
         }
-        if (PIPE_UART_OVER_BTLE_UART_CONTROL_POINT_RX == aci_evt->params.data_received.rx_data.pipe_number)
-        {
-            uart_process_control_point_rx(&aci_evt->params.data_received.rx_data.aci_data[0], aci_evt->len - 2); //Subtract for Opcode and Pipe number
-        }
-        break;
+      }
+      if (PIPE_UART_OVER_BTLE_UART_CONTROL_POINT_RX == aci_evt->params.data_received.rx_data.pipe_number)
+      {
+        uart_process_control_point_rx(&aci_evt->params.data_received.rx_data.aci_data[0], aci_evt->len - 2); //Subtract for Opcode and Pipe number
+      }
+      break;
 
-      case ACI_EVT_DATA_CREDIT:
-        aci_state.data_credit_available = aci_state.data_credit_available + aci_evt->params.data_credit.credit;
-        break;
+    case ACI_EVT_DATA_CREDIT:
+      aci_state.data_credit_available = aci_state.data_credit_available + aci_evt->params.data_credit.credit;
+      break;
 
-      case ACI_EVT_PIPE_ERROR:
-        //See the appendix in the nRF8001 Product Specication for details on the error codes
-        Serial.print(F("ACI Evt Pipe Error: Pipe #:"));
-        Serial.print(aci_evt->params.pipe_error.pipe_number, DEC);
-        Serial.print(F("  Pipe Error Code: 0x"));
-        Serial.println(aci_evt->params.pipe_error.error_code, HEX);
+    case ACI_EVT_PIPE_ERROR:
+      //See the appendix in the nRF8001 Product Specication for details on the error codes
+      Serial.print(F("ACI Evt Pipe Error: Pipe #:"));
+      Serial.print(aci_evt->params.pipe_error.pipe_number, DEC);
+      Serial.print(F("  Pipe Error Code: 0x"));
+      Serial.println(aci_evt->params.pipe_error.error_code, HEX);
 
-        //Increment the credit available as the data packet was not sent.
-        //The pipe error also represents the Attribute protocol Error Response sent from the peer and that should not be counted
-        //for the credit.
-        if (ACI_STATUS_ERROR_PEER_ATT_ERROR != aci_evt->params.pipe_error.error_code)
-        {
-          aci_state.data_credit_available++;
-        }
-        break;
+      //Increment the credit available as the data packet was not sent.
+      //The pipe error also represents the Attribute protocol Error Response sent from the peer and that should not be counted
+      //for the credit.
+      if (ACI_STATUS_ERROR_PEER_ATT_ERROR != aci_evt->params.pipe_error.error_code)
+      {
+        aci_state.data_credit_available++;
+      }
+      break;
 
-      case ACI_EVT_HW_ERROR:
-        Serial.print(F("HW error: "));
-        Serial.println(aci_evt->params.hw_error.line_num, DEC);
+    case ACI_EVT_HW_ERROR:
+      Serial.print(F("HW error: "));
+      Serial.println(aci_evt->params.hw_error.line_num, DEC);
 
-        for(uint8_t counter = 0; counter <= (aci_evt->len - 3); counter++)
-        {
-          Serial.write(aci_evt->params.hw_error.file_name[counter]); //uint8_t file_name[20];
-        }
-        Serial.println();
-        lib_aci_connect(180/* in seconds */, 0x0050 /* advertising interval 50ms*/);
-        Serial.println(F("Advertising started"));
-        break;
+      for(uint8_t counter = 0; counter <= (aci_evt->len - 3); counter++)
+      {
+        Serial.write(aci_evt->params.hw_error.file_name[counter]); //uint8_t file_name[20];
+      }
+      Serial.println();
+      lib_aci_connect(180/* in seconds */, 0x0050 /* advertising interval 50ms*/);
+      Serial.println(F("Advertising started"));
+      break;
 
     }
   }
@@ -1061,47 +1070,47 @@ bool stringComplete = false;  // whether the string is complete
 uint8_t stringIndex = 0;      //Initialize the index to store incoming chars
 
 void loop() {
-  
+
   //Process any ACI commands or events
   aci_loop();
 
   Motoreta.LsMtMotor();        // AFEGIT
 
   LsPeriferics();
-/*
+  /*
   // print the string when a newline arrives:
-  if (stringComplete)
-  {
-    Serial.print(F("Sending: "));
-    Serial.println((char *)&uart_buffer[0]);
-
-    uart_buffer_len = stringIndex + 1;
-
-    if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, uart_buffer, uart_buffer_len))
-    {
-      Serial.println(F("Serial input dropped"));
-    }
-
-    // clear the uart_buffer:
-    for (stringIndex = 0; stringIndex < 20; stringIndex++)
-    {
-      uart_buffer[stringIndex] = ' ';
-    }
-
-    // reset the flag and the index in order to receive more data
-    stringIndex    = 0;
-    stringComplete = false;
-  }
-*/
-/*
+   if (stringComplete)
+   {
+   Serial.print(F("Sending: "));
+   Serial.println((char *)&uart_buffer[0]);
+   
+   uart_buffer_len = stringIndex + 1;
+   
+   if (!lib_aci_send_data(PIPE_UART_OVER_BTLE_UART_TX_TX, uart_buffer, uart_buffer_len))
+   {
+   Serial.println(F("Serial input dropped"));
+   }
+   
+   // clear the uart_buffer:
+   for (stringIndex = 0; stringIndex < 20; stringIndex++)
+   {
+   uart_buffer[stringIndex] = ' ';
+   }
+   
+   // reset the flag and the index in order to receive more data
+   stringIndex    = 0;
+   stringComplete = false;
+   }
+   */
+  /*
   //For ChipKit you have to call the function that reads from Serial
-  #if defined (__PIC32MX__)
-    if (Serial.available())
-    {
-      serialEvent();
-    }
-  #endif
- */ 
+   #if defined (__PIC32MX__)
+   if (Serial.available())
+   {
+   serialEvent();
+   }
+   #endif
+   */
 }
 
 /*
@@ -1144,6 +1153,7 @@ void serialEvent() {
     }
   }
 }
+
 
 
 

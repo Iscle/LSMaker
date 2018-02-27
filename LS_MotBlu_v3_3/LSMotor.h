@@ -1,21 +1,20 @@
-
 /*************************************************** 
-  This is a library for the LSMaker Motor Control
-  Designed specifically to work with the LSMaker robot
-  ----> http://www.salleurl.edu
-  These Motor Control TAD use PWM and Encoders IRQs
-  
-  Written by Joan Camps/Marcos Hervas for LaSalle-URL.  
-  BSD license, all text above must be included in any redistribution
+ * This is a library for the LSMaker Motor Control
+ * Designed specifically to work with the LSMaker robot
+ * ----> http://www.salleurl.edu
+ * These Motor Control TAD use PWM and Encoders IRQs
+ * 
+ * Written by Joan Camps/Marcos Hervas for LaSalle-URL.  
+ * BSD license, all text above must be included in any redistribution
  ****************************************************/
 
 #ifndef LSMOTOR_H
 #define LSMOTOR_H
 
 #if (ARDUINO >= 100)
- #include "Arduino.h"
+#include "Arduino.h"
 #else
- #include "WProgram.h"
+#include "WProgram.h"
 #endif
 
 // ========
@@ -23,7 +22,7 @@
 // ========
 // 1 volta de motor son 206.5 tics d'encoder
 const float CTNT_TICS_VOLTA = 206.25;                    // tics d'encoder en fer una volta completa de la roda
-                                                         // l'encoder és de 11PPR a nivell de motor però sembla que tenim una reductora de 18.75:1 (206.25 = 11 x 18.75)
+// l'encoder és de 11PPR a nivell de motor però sembla que tenim una reductora de 18.75:1 (206.25 = 11 x 18.75)
 // el perimetre de la roda es de  13.5088cm = (2*pi*r) = (2*pi*2.15cm)
 const float CTNT_PERIM_RODA =  13.5088;                 // centimetres del perimetre de la roda
 // tics per centimetre es: 15.2863 = 206.5/13.5088
@@ -36,13 +35,13 @@ const int RE2 = 26;           // pin d'entrada de l'encoder 2 del motor dret
 
 
 class LSMt {
- public:
+public:
   LSMt();
   void begin(void);
   void LsMtMotor(void);
   void LsMtMando(float LeftSpeed,float RightSpeed,int push);
-  
- private:
+
+private:
   void ENC_Init(void);
   static void ISRencoderLeft(void);
   static void ISRencoderRight(void) ;
@@ -85,4 +84,5 @@ class LSMt {
 
 
 #endif
+
 
