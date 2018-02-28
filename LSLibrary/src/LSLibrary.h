@@ -7,15 +7,18 @@
 #ifndef LSLibrary_h
 #define LSLibrary_h
 
+#define CHIPSELECT 53
+
 #include "Arduino.h"
 
-class LSLibrary {
+class LSLibraryClass {
 	public:
-		Prova(int velocitat);
-		void Cosa1();
-		void Cosa2();
+		static void begin();
+		static void getMAC(byte *macAddress);
 	private:
-		int _velocitat;
+		static uint8_t initialized;
 };
+
+extern LSLibraryClass LSLibrary
 
 #endif
