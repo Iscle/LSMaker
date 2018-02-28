@@ -76,7 +76,10 @@ void LSLibrary::getMAC (byte *macAddress) {
   digitalWrite (53, HIGH); // Pull CS high
 }
 
-// Sets the motor speed, (LEFT/RIGHT, FORWARD/REVERSE, 0-255)
+void LSLibrary::setMotorRotation (byte motor, byte direction, byte pwm, byte ) {
+
+}
+// Sets the motor speed, (LEFT/RIGHT, FORWARD/BRAKE/REVERSE, 0-255)
 void LSLibrary::setMotor (byte motor, byte direction, byte pwm) {
   // Default to left motor
   int motorEnablePin = 24;
@@ -84,7 +87,7 @@ void LSLibrary::setMotor (byte motor, byte direction, byte pwm) {
   int motorPwmPim = 8;
   byte enable = 1;
 
-  if (pwm == 0) {
+  if (direction == 0) {
     enable = 0;
   }
 

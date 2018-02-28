@@ -10,7 +10,8 @@
 #define LEFT 0
 #define RIGHT 1
 #define FORWARD 1
-#define REVERSE 0
+#define BRAKE 0
+#define REVERSE -1
 
 #include "Arduino.h"
 
