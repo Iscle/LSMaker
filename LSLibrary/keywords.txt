@@ -12,6 +12,7 @@ LSLibrary KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
+begin KEYWORD2
 getMAC KEYWORD2
 
 #######################################

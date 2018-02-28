@@ -7,18 +7,14 @@
 #ifndef LSLibrary_h
 #define LSLibrary_h
 
-#define CHIPSELECT 53
-
 #include "Arduino.h"
 
-class LSLibraryClass {
+class LSLibrary {
 	public:
-		static void begin();
-		static void getMAC(byte *macAddress);
+		void begin();
+		void getMAC(byte *macAddress);
 	private:
 		static uint8_t initialized;
 };
-
-extern LSLibraryClass LSLibrary
 
 #endif
