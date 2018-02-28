@@ -10,34 +10,55 @@
 
 uint8_t LSLibrary::initialized = 0;
 
+// SPI pins
+#define SPI_A0 49
+#define SPI_A1 48
+#define SPI_A2 47
+#define CS 53
+
+// Encoder pins
+#define LE_CLK 3
+#define LE_DATA 27
+#define RE_CLK 2
+#define RE_DATA 26
+
+// Motor pins
+#define LM_ENABLE 24
+#define LM_DIRECTION 25
+#define LM_PWM 8
+#define RM_ENABLE 22
+#define RM_DIRECTION 23
+#define RM_PWM 7
+
+// Setup all the pins and functions requiered by the library
 void LSLibrary::begin() {
   if (!initialized) {
     // SPI bus
-    pinMode(49, OUTPUT);  // SPI_A0 (Decoder LSB)
-    pinMode(48, OUTPUT);  // SPI_A1
-    pinMode(47, OUTPUT);  // SPI_A2 (Decoder MSB)
-    pinMode(53, OUTPUT);  // CS_Pin (Decoder enable)
+    pinMode(SPI_A0, OUTPUT);  // SPI_A0 (Decoder LSB)
+    pinMode(SPI_A1, OUTPUT);  // SPI_A1
+    pinMode(SPI_A2, OUTPUT);  // SPI_A2 (Decoder MSB)
+    pinMode(CS, OUTPUT);  // CS_Pin (Decoder enable)
 
     // Encoder
-    pinMode(3, INPUT_PULLUP);   // Left Encoder 1 (Interrupt)
-    pinMode(27, INPUT_PULLUP);  // Left Encoder 2
-    pinMode(2, INPUT_PULLUP);   // Right Encoder 1 (Interrupt)
-    pinMode(26, INPUT_PULLUP);  // Right Encoder 2
+    pinMode(LE_CLK, INPUT_PULLUP);   // Left Encoder 1 (Interrupt)
+    pinMode(LE_DATA, INPUT_PULLUP);  // Left Encoder 2
+    pinMode(RE_CLK, INPUT_PULLUP);   // Right Encoder 1 (Interrupt)
+    pinMode(RE_DATA, INPUT_PULLUP);  // Right Encoder 2
 
-    // Left motor
-    pinMode(24, OUTPUT); // Left motor enable pin
-    pinMode(25, OUTPUT); // Left motor direction pin (Forward/!Reverse)
-    pinMode(8, OUTPUT);  // Left motor PWM pin
-    // Right motor
-    pinMode(22, OUTPUT); // Right motor enable pin
-    pinMode(23, OUTPUT); // Right motor direction pin (Forward/!Reverse)
-    pinMode(7, OUTPUT);  // Right motor PWM pin
+    // Motors
+    pinMode(LM_ENABLE, OUTPUT); // Left motor enable pin
+    pinMode(LM_DIRECTION, OUTPUT); // Left motor direction pin (Forward/!Reverse)
+    pinMode(LM_PWM), OUTPUT);  // Left motor PWM pin
+    pinMode(RM_ENABLE, OUTPUT); // Right motor enable pin
+    pinMode(RM_DIRECTION, OUTPUT); // Right motor direction pin (Forward/!Reverse)
+    pinMode(RM_PWM, OUTPUT);  // Right motor PWM pin
 
     SPI.begin();
   }
   initialized++;
 }
 
+// Function to get the MAC address stored on the EEPROM
 void LSLibrary::getMAC (byte *macAddress) {
   // Set decoder to EEPROM address
   digitalWrite(49, HIGH); // SPI_A0
@@ -53,4 +74,28 @@ void LSLibrary::getMAC (byte *macAddress) {
   }
 
   digitalWrite (53, HIGH); // Pull CS high
+}
+
+// Sets the motor speed, (LEFT/RIGHT, FORWARD/REVERSE, 0-255)
+void LSLibrary::setMotor (byte motor, byte direction, byte pwm) {
+  // Default to left motor
+  int motorEnablePin = 24;
+  int motorDirectionPin = 25;
+  int motorPwmPim = 8;
+  byte enable = 1;
+
+  if (pwm == 0) {
+    enable = 0;
+  }
+
+  // Change pin variables if we need to use the right motor
+  if (motor == 1) {
+    motorEnablePin = 22;
+    motorDirectionPin = 23;
+    motorPwmPim = 7;
+  }
+
+  analogWrite(motorPwmPin, pwm);
+  digitalWrite(motorDirectionPin, direction);
+  digitalWrite(motorEnablePin, enable);
 }
