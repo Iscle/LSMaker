@@ -12,9 +12,9 @@ LSLibrary KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-begin KEYWORD2
-getMAC KEYWORD2
-setMotor KEYWORD2
+EEPROMReadByte  KEYWORD2
+getMAC  KEYWORD2
+setMotor  KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)
@@ -27,4 +27,5 @@ setMotor KEYWORD2
 LEFT  LITERAL1
 RIGHT LITERAL1
 FORWARD LITERAL1
+BRAKE LITERAL1
 REVERSE LITERAL1

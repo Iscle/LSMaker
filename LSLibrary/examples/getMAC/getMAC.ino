@@ -5,10 +5,7 @@ LSLibrary robot; // Create an instance
 
 void setup () {
   Serial.begin(115200); // Initialise the serial to 115200bps
-  robot.begin(); // Initialise the library
-}
-
-void loop () {
+  
   byte mac[6]; // The MAC will be stored here
 
   robot.getMAC(mac); // Get the MAC from the EEPROM
@@ -18,10 +15,13 @@ void loop () {
     Serial.print(mac[i]);
     if (i != 5) {
       Serial.print(";");
-    } 
+    }
     else {
       Serial.println();
     }
   }
 }
 
+void loop () {
+  //This example doesn't need anything here.
+}

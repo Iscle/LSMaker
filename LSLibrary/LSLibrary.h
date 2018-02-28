@@ -13,11 +13,17 @@
 #define BRAKE 0
 #define REVERSE -1
 
+#define BLE 1
+#define TFT 2
+#define EEPROM 3
+#define SD 4
+
 #include "Arduino.h"
 
 class LSLibrary {
 	public:
-		void begin();
+		LSLibrary();
+		byte EEPROMReadByte(byte address);
 		void getMAC(byte *macAddress);
 		void setMotor(byte motor, byte direction, byte pwm);
 	private:
