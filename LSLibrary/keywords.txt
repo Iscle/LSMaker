@@ -12,6 +12,13 @@ LSLibrary KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
+setTFTBacklight KEYWORD2
+setCS KEYWORD2
+WiFiRestart KEYWORD2
+WiFiVersion KEYWORD2
+setWiFiMode KEYWORD2
+WiFiList  KEYWORD2
+setWiFiAP KEYWORD2
 EEPROMReadByte  KEYWORD2
 getMAC  KEYWORD2
 setMotor  KEYWORD2

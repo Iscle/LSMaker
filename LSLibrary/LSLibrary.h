@@ -23,11 +23,18 @@
 class LSLibrary {
 	public:
 		LSLibrary();
+		void setTFTBacklight(byte backlight);
+		void setCS(byte cs);
+		void WiFiRestart();
+		void WiFiVersion();
+		void setWiFiMode(byte mode);
+		void WiFiList();
+		void setWiFiAP(char *ssid, char *pwd, int chl, int mode);
 		byte EEPROMReadByte(byte address);
 		void getMAC(byte *macAddress);
 		void setMotor(byte motor, byte direction, byte pwm);
 	private:
-		static uint8_t initialized;
+		static bool initialized;
 };
 
 #endif

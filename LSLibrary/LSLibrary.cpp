@@ -8,7 +8,9 @@
 #include "SPI.h"
 #include "LSLibrary.h"
 
-uint8_t LSLibrary::initialized = 0;
+bool LSLibrary::initialized = false;
+
+#define WIFIBAUD 9600
 
 // SPI pins
 #define SPI_A0 49
@@ -60,9 +62,9 @@ LSLibrary::LSLibrary() {
     pinMode(V_BAT, INPUT); // Battery voltage input pin
 
     SPI.begin();
-    Serial3.begin(9600); // Start serial for ESP8266
+    Serial3.begin(WIFIBAUD); // Start serial for ESP8266
   }
-  initialized++;
+  initialized = true;
 }
 
 // Sets TFT Backlight (0% - 100%)
@@ -70,6 +72,7 @@ void LSLibrary::setTFTBacklight(byte backlight) {
   analogWrite(TFT_BL, map(backlight, 0, 100, 0, 255));
 }
 
+// Sets the decoder CS pin output
 void LSLibrary::setCS(byte cs) {
   switch (cs) {
     case 0:
@@ -128,8 +131,37 @@ void LSLibrary::WiFiRestart () {
   Serial3.println("AT+RST");
 }
 
+// Get ESP8266 version details
 void LSLibrary::WiFiVersion () {
   Serial3.println("AT+GMR");
+}
+
+/*  Modes:
+    1: Station mode
+    2: SoftAP mode
+    3: SoftAP + Station mode
+*/
+
+// Sets the ESP8266 WiFi mode
+void LSLibrary::setWiFiMode(byte mode) {
+  Serial3.println("AT+CWMODE_DEF=" + mode);
+}
+
+// Lists the available WiFi hotspots seen by the ESP8266
+void LSLibrary::WiFiList() {
+	Serial3.println("AT+CWLAP");
+}
+
+/*  Encryption methods:
+    0: OPEN
+    2: WPA_PSK
+    3: WPA2_PSK
+    4: WPA_WPA2_PSK
+*/
+
+// Sets the WiFi AP the ESP8266 will connect to
+void LSLibrary::setWiFiAP(char *ssid, char *pwd, int chl, int mode) {
+	Serial3.println("AT+CWSAP_DEF=\"" + ssid + "\",\"" + pwd + "\"," + chl + "," + mode);
 }
 
 // Reads a byte from the EEPROM and returns it
