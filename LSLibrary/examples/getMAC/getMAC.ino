@@ -12,9 +12,9 @@ void setup () {
 
   // Print the MAC to the serial interface
   for (int i = 0; i < 6; i++) {
-    Serial.print(mac[i]);
+    Serial.print(mac[i], HEX);
     if (i != 5) {
-      Serial.print(";");
+      Serial.print(":");
     }
     else {
       Serial.println();
@@ -23,5 +23,5 @@ void setup () {
 }
 
 void loop () {
-  //This example doesn't need anything here.
+  // Nothing to do here
 }

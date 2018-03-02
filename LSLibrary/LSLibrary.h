@@ -23,6 +23,7 @@
 class LSLibrary {
 	public:
 		LSLibrary();
+		bool touchScreenTouched();
 		void setTFTBacklight(byte backlight);
 		void setCS(byte cs);
 		void WiFiRestart();
@@ -30,10 +31,14 @@ class LSLibrary {
 		void setWiFiMode(byte mode);
 		void WiFiList();
 		void setWiFiAP(char *ssid, char *pwd, int chl, int mode);
+		void joinWiFi(char *ssid, char *pwd);
+		float getVBat();
+		void EEPROMWriteByte(byte address, byte data);
 		byte EEPROMReadByte(byte address);
 		void getMAC(byte *macAddress);
 		void setMotor(byte motor, byte direction, byte pwm);
 	private:
+		void touchScreenIRQ();
 		static bool initialized;
 };
 

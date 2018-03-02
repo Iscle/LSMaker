@@ -34,6 +34,7 @@ bool LSLibrary::initialized = false;
 
 // Power pins
 #define V_BAT A1
+#define TFT_BL 6
 
 // Setup all the pins and functions requiered by the library
 LSLibrary::LSLibrary() {
@@ -53,13 +54,14 @@ LSLibrary::LSLibrary() {
     // Motors
     pinMode(LM_ENABLE, OUTPUT);     // Left motor enable pin
     pinMode(LM_DIRECTION, OUTPUT);  // Left motor direction pin (Forward/!Reverse)
-    pinMode(LM_PWM), OUTPUT);       // Left motor PWM pin
+    pinMode(LM_PWM, OUTPUT);       // Left motor PWM pin
     pinMode(RM_ENABLE, OUTPUT);     // Right motor enable pin
     pinMode(RM_DIRECTION, OUTPUT);  // Right motor direction pin (Forward/!Reverse)
     pinMode(RM_PWM, OUTPUT);        // Right motor PWM pin
 
     // Power
     pinMode(V_BAT, INPUT); // Battery voltage input pin
+    pinMode(TFT_BL, OUTPUT);
 
     SPI.begin();
     Serial3.begin(WIFIBAUD); // Start serial for ESP8266
@@ -67,9 +69,27 @@ LSLibrary::LSLibrary() {
   initialized = true;
 }
 
+// Touchscreen
+void LSLibrary::touchScreenIRQ () {
+  // El que sigui
+}
+
+bool LSLibrary::touchScreenTouched () {
+  // Chech if TS is pressed
+  return true;
+}
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------
+
 // Sets TFT Backlight (0% - 100%)
 void LSLibrary::setTFTBacklight(byte backlight) {
-  analogWrite(TFT_BL, map(backlight, 0, 100, 0, 255));
+  analogWrite(TFT_BL, backlight);
 }
 
 // Sets the decoder CS pin output
@@ -80,49 +100,49 @@ void LSLibrary::setCS(byte cs) {
       digitalWrite(SPI_A0, LOW);
       digitalWrite(SPI_A1, LOW);
       digitalWrite(SPI_A2, LOW);
-      brake;
+      break;
     case 1:
       // BLE CS decoder address
       digitalWrite(SPI_A0, HIGH);
       digitalWrite(SPI_A1, LOW);
       digitalWrite(SPI_A2, LOW);
-      brake;
+      break;
     case 2:
       // TFT CS decoder address
     	digitalWrite(SPI_A0, LOW);
     	digitalWrite(SPI_A1, HIGH);
     	digitalWrite(SPI_A2, LOW);
-      brake;
+      break;
     case 3:
       // EEPROM CS decoder address
       digitalWrite(SPI_A0, HIGH);
       digitalWrite(SPI_A1, HIGH);
       digitalWrite(SPI_A2, LOW);
-      brake;
+      break;
     case 4:
       // SD CS decoder address
       digitalWrite(SPI_A0, LOW);
       digitalWrite(SPI_A1, LOW);
       digitalWrite(SPI_A2, HIGH);
-      brake;
+      break;
     case 5:
       // SPI_5 CS decoder address
       digitalWrite(SPI_A0, HIGH);
       digitalWrite(SPI_A1, LOW);
       digitalWrite(SPI_A2, HIGH);
-      brake;
+      break;
     case 6:
       // SPI_6 CS decoder address
       digitalWrite(SPI_A0, LOW);
       digitalWrite(SPI_A1, HIGH);
       digitalWrite(SPI_A2, HIGH);
-      brake;
+      break;
     case 7:
       // SPI_7 CS decoder address
       digitalWrite(SPI_A0, HIGH);
       digitalWrite(SPI_A1, HIGH);
       digitalWrite(SPI_A2, HIGH);
-      brake;
+      break;
   }
 }
 
@@ -159,9 +179,39 @@ void LSLibrary::WiFiList() {
     4: WPA_WPA2_PSK
 */
 
-// Sets the WiFi AP the ESP8266 will connect to
+// Sets the WiFi AP the ESP8266 will create (Only SoftAP mode)
 void LSLibrary::setWiFiAP(char *ssid, char *pwd, int chl, int mode) {
-	Serial3.println("AT+CWSAP_DEF=\"" + ssid + "\",\"" + pwd + "\"," + chl + "," + mode);
+	Serial3.println((String)"AT+CWSAP_DEF=\"" + ssid + "\",\"" + pwd + "\"," + chl + "," + mode);
+}
+
+// Sets the WiFi AP the ESP8266 will connect to (Only Station mode)
+void LSLibrary::joinWiFi(char *ssid, char *pwd) {
+	Serial3.println((String)"AT+CWSAP_DEF=\"" + ssid + "\",\"" + pwd + "\"");
+}
+
+float LSLibrary::getVBat() {
+  return analogRead(V_BAT) * 21.2 / 1023.0;
+}
+
+// Writes a byte to the EEPROM (0 - 249, *)
+void LSLibrary::EEPROMWriteByte (byte address, byte data) {
+  if (address < 250) { // If we aren't overwritting the MAC address, write the data
+    setCS(EEPROM);
+
+    digitalWrite (CS, LOW);   // Pull CS low
+    SPI.transfer(0x06);       // Disable write protection
+    digitalWrite (CS, HIGH);  // Pull CS high
+
+    digitalWrite (CS, LOW);   // Pull CS low
+    SPI.transfer(0x02);       // Set the EEPROM in write mode
+    SPI.transfer(address);    // Send the address where the byte should be stored
+    SPI.transfer(data);       // Send the byte to be stored
+    digitalWrite (CS, HIGH);  // Pull CS high
+
+    digitalWrite (CS, LOW);   // Pull CS low
+    SPI.transfer(0x04);       // Enable write protection
+    digitalWrite (CS, HIGH);  // Pull CS high
+  }
 }
 
 // Reads a byte from the EEPROM and returns it
@@ -174,16 +224,14 @@ byte LSLibrary::EEPROMReadByte (byte address) {
   SPI.transfer(0x03);         // Set the EEPROM in read mode
   SPI.transfer(address);      // Send the position to read
   data = SPI.transfer(0x00);  // Read the data
+  digitalWrite (CS, HIGH);    // Pull CS high
 
   return data;  // Return the received data
 }
 
 // Function to get the MAC address stored on the EEPROM
 void LSLibrary::getMAC (byte *macAddress) {
-  // Set decoder to EEPROM address
-  digitalWrite(SPI_A0, HIGH); // SPI_A0
-  digitalWrite(SPI_A1, HIGH); // SPI_A1
-  digitalWrite(SPI_A2, LOW);  // SPI_A2
+  setCS(EEPROM);
 
   digitalWrite (CS, LOW); // Pull CS low
   SPI.transfer(0x03);     // Set the EEPROM in read mode
@@ -196,7 +244,7 @@ void LSLibrary::getMAC (byte *macAddress) {
   digitalWrite (CS, HIGH); // Pull CS high
 }
 
-// Sets the motor speed, (LEFT/RIGHT, FORWARD/BRAKE/REVERSE, 0% - 100%)
+// Sets the motor speed, (LEFT/RIGHT, FORWARD/break/REVERSE, 0 - 255)
 void LSLibrary::setMotor (byte motor, byte direction, byte speed) {
   // Default to left motor
   int motorEnablePin = LM_ENABLE;
@@ -204,16 +252,9 @@ void LSLibrary::setMotor (byte motor, byte direction, byte speed) {
   int motorPwmPin = LM_PWM;
   byte enable = 1;
 
-  switch (direction) {
-    case -1:
-      direction = LOW;
-      break;
-    case 0:
-      enable = 0;
-      break;
-    case 1:
-      direction = HIGH;
-      break;
+  if (direction == 2) {
+    enable = 0;
+    direction = 1;
   }
 
   // Change pin variables if we need to use the right motor
@@ -223,7 +264,7 @@ void LSLibrary::setMotor (byte motor, byte direction, byte speed) {
     motorPwmPin = RM_PWM;
   }
 
-  analogWrite(motorPwmPin, map(speed, 0, 100, 0, 255));
+  analogWrite(motorPwmPin, speed);
   digitalWrite(motorDirectionPin, direction);
   digitalWrite(motorEnablePin, enable);
 }
