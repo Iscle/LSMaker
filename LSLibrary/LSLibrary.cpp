@@ -35,6 +35,7 @@ bool LSLibrary::initialized = false;
 // Power pins
 #define V_BAT A1
 #define TFT_BL 6
+#define FRONT_LEDS 5
 
 // Setup all the pins and functions requiered by the library
 LSLibrary::LSLibrary() {
@@ -62,6 +63,7 @@ LSLibrary::LSLibrary() {
     // Power
     pinMode(V_BAT, INPUT); // Battery voltage input pin
     pinMode(TFT_BL, OUTPUT);
+    pinMode(FRONT_LEDS, OUTPUT);
 
     SPI.begin();
     Serial3.begin(WIFIBAUD); // Start serial for ESP8266
@@ -244,7 +246,11 @@ void LSLibrary::getMAC (byte *macAddress) {
   digitalWrite (CS, HIGH); // Pull CS high
 }
 
-// Sets the motor speed, (LEFT/RIGHT, FORWARD/break/REVERSE, 0 - 255)
+void LSLibrary::setLEDs (byte brightness) {
+  analogWrite(FRONT_LEDS, abs(255 - brightness));
+}
+
+// Sets the motor speed, (LEFT/RIGHT, FORWARD/BRAKE/REVERSE, 0 - 255)
 void LSLibrary::setMotor (byte motor, byte direction, byte speed) {
   // Default to left motor
   int motorEnablePin = LM_ENABLE;
@@ -254,7 +260,7 @@ void LSLibrary::setMotor (byte motor, byte direction, byte speed) {
 
   if (direction == 2) {
     enable = 0;
-    direction = 1;
+    direction = 0;
   }
 
   // Change pin variables if we need to use the right motor
